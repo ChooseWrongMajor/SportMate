@@ -1,0 +1,60 @@
+CREATE TABLE IF NOT EXISTS users (
+  id BIGSERIAL PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  initials VARCHAR(4) NOT NULL DEFAULT '',
+  sport VARCHAR(80) NOT NULL DEFAULT 'Bóng đá',
+  level VARCHAR(50) NOT NULL DEFAULT 'Mọi trình độ',
+  reputation INTEGER NOT NULL DEFAULT 0 CHECK (reputation BETWEEN 0 AND 100),
+  matches_count INTEGER NOT NULL DEFAULT 0,
+  reviews_count INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS matches (
+  id BIGSERIAL PRIMARY KEY,
+  title VARCHAR(160) NOT NULL,
+  sport VARCHAR(40) NOT NULL,
+  icon VARCHAR(20) NOT NULL DEFAULT '',
+  location VARCHAR(255) NOT NULL,
+  distance NUMERIC(8, 2) NOT NULL DEFAULT 0,
+  date_label VARCHAR(80) NOT NULL DEFAULT 'Sắp tới',
+  time_label VARCHAR(80) NOT NULL DEFAULT 'Chưa xác định',
+  max_players INTEGER NOT NULL CHECK (max_players > 0),
+  level VARCHAR(50) NOT NULL DEFAULT 'Mọi trình độ',
+  price VARCHAR(80) NOT NULL DEFAULT 'Miễn phí',
+  host_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  lat NUMERIC(10, 7) NOT NULL DEFAULT 10.8500,
+  lng NUMERIC(10, 7) NOT NULL DEFAULT 106.7600,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS match_participants (
+  match_id BIGINT NOT NULL REFERENCES matches(id) ON DELETE CASCADE,
+  user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  joined_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (match_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+  id BIGSERIAL PRIMARY KEY,
+  match_id BIGINT NOT NULL REFERENCES matches(id) ON DELETE CASCADE,
+  user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  text TEXT NOT NULL CHECK (LENGTH(TRIM(text)) > 0),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id BIGSERIAL PRIMARY KEY,
+  user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(160) NOT NULL,
+  text TEXT NOT NULL,
+  unread BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS matches_sport_idx ON matches (sport);
+CREATE INDEX IF NOT EXISTS matches_created_at_idx ON matches (created_at DESC);
+CREATE INDEX IF NOT EXISTS messages_match_idx ON messages (match_id, created_at);
+CREATE INDEX IF NOT EXISTS notifications_user_idx ON notifications (user_id, created_at DESC);
