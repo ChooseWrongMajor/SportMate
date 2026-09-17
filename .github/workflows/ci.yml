@@ -1,5 +1,5 @@
 
-name: SportMate CI
+name: SportMate CI/CD
 
 on:
   push:
@@ -36,3 +36,22 @@ jobs:
 
       - name: Build Docker images
         run: docker compose build
+
+      - name: Login to Docker Hub
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push backend image
+        if: github.event_name == 'push'
+        run: |
+          docker tag sportmate-backend:latest ${{ secrets.DOCKERHUB_USERNAME }}/sportmate-backend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sportmate-backend:latest
+
+      - name: Push frontend image
+        if: github.event_name == 'push'
+        run: |
+          docker tag sportmate-frontend:latest ${{ secrets.DOCKERHUB_USERNAME }}/sportmate-frontend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/sportmate-frontend:latest
