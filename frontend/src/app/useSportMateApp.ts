@@ -268,7 +268,7 @@ export function useSportMateApp() {
 
     try {
       const endpoint = mode === 'login' ? '/api/login' : '/api/register'
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`http://54.255.188.96:5000${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
