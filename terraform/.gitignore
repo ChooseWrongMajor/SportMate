@@ -1,51 +1,18 @@
-# ========================================
-# Terraform
-# ========================================
-
 .terraform/
-
 *.tfstate
 *.tfstate.*
-*.tfstate.backup
-
+*.tfplan
 crash.log
 crash.*.log
-
-# ========================================
-# Terraform variables
-# ========================================
-
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
 terraform.tfvars
-*.tfvars
-
-# ========================================
-# Terraform plan files
-# ========================================
-
-*.tfplan
-*.plan
-
-# ========================================
-# Secrets
-# ========================================
-
+*.pem
 .env
 .env.*
 !.env.example
-
-*.pem
-*.key
-
-# ========================================
-# OS
-# ========================================
-
-.DS_Store
-Thumbs.db
-
-# ========================================
-# Editor
-# ========================================
-
-.vscode/
-.idea/
+node_modules/
+dist/
+build/

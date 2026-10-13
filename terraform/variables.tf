@@ -1,98 +1,48 @@
 variable "aws_region" {
-  description = "AWS Region"
+  description = "AWS region"
   type        = string
+  default     = "ap-southeast-1"
 }
-
 variable "project_name" {
   description = "Project name"
   type        = string
+  default     = "sportmate"
 }
-
 variable "environment" {
-  description = "Deployment environment"
+  description = "Environment tag"
   type        = string
+  default     = "dev"
 }
-
-# -------------------------
-# VPC
-# -------------------------
-
 variable "vpc_cidr" {
-  description = "CIDR block of the VPC"
+  description = "VPC CIDR"
   type        = string
+  default     = "10.20.0.0/16"
 }
-
-# -------------------------
-# Availability Zones
-# -------------------------
-
-variable "availability_zone_a" {
-  description = "First Availability Zone"
+variable "public_subnet_cidr" {
+  description = "Public subnet CIDR"
   type        = string
+  default     = "10.20.1.0/24"
 }
-
-variable "availability_zone_b" {
-  description = "Second Availability Zone"
+variable "availability_zone" {
+  description = "Subnet Availability Zone"
   type        = string
+  default     = "ap-southeast-1a"
 }
-
-# -------------------------
-# Public Subnets
-# -------------------------
-
-variable "public_subnet_a_cidr" {
-  description = "CIDR block for public subnet A"
-  type        = string
-}
-
-variable "public_subnet_b_cidr" {
-  description = "CIDR block for public subnet B"
-  type        = string
-}
-
-# -------------------------
-# Private Subnets
-# -------------------------
-
-variable "private_subnet_a_cidr" {
-  description = "CIDR block for private subnet A"
-  type        = string
-}
-
-variable "private_subnet_b_cidr" {
-  description = "CIDR block for private subnet B"
-  type        = string
-}
-
-# -------------------------
-# EC2
-# -------------------------
-
-variable "ami_id" {
-  description = "Ubuntu AMI ID"
-  type        = string
-}
-
 variable "instance_type" {
-  description = "EC2 instance type"
+  description = "EC2 type; check account eligibility and pricing"
   type        = string
+  default     = "t3.micro"
 }
-
 variable "key_name" {
-  description = "Existing EC2 Key Pair name"
+  description = "Existing EC2 Key Pair name in selected region"
   type        = string
 }
-
 variable "my_ip" {
-  description = "Your public IP address in CIDR notation, e.g. 1.2.3.4/32"
+  description = "Administrator public IPv4 in CIDR notation, e.g. 1.2.3.4/32"
   type        = string
 }
-
-# -------------------------
-# S3
-# -------------------------
-
-variable "frontend_bucket_name" {
-  description = "Globally unique S3 bucket name for SportMate frontend"
-  type        = string
+variable "root_volume_size" {
+  description = "EC2 root EBS volume size in GiB"
+  type        = number
+  default     = 20
 }
